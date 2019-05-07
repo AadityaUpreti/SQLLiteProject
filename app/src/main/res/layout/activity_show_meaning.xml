@@ -6,16 +6,36 @@
     android:layout_height="match_parent"
     tools:context=".DictonaryListData"
     android:orientation="vertical">
+
     <EditText
-        android:hint="Search word"
+        android:hint="Word"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        android:textColor="#000"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/txtMeaningWord"/>
+        android:layout_height="50dp"
+        android:layout_margin="10dp"
+        android:id="@+id/tvWord"/>
+    <EditText
+        android:hint="Meaning"
+        android:textColor="#000"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_margin="10dp"
+        android:id="@+id/tvMeaning"/>
+
     <Button
-        android:text="search word"
+        android:id="@+id/btnUpdate"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/btnSearch"/>
+        android:text="Update word" />
+    <Button
+        android:id="@+id/btnDelete"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Delete word" />
 
 
 </LinearLayout>

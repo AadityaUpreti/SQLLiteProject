@@ -6,6 +6,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,8 +60,8 @@ public class MyHelper extends SQLiteOpenHelper {
 
     public List<Word> getAllWordss(SQLiteDatabase db) {
         List<Word> words = new ArrayList<>();
-        String column[]={WordId,Word,Meaning};
-        Cursor cursor = db.query(tblWord, column,null,null,null,null,null,null);
+        String column[] = {WordId, Word, Meaning};
+        Cursor cursor = db.query(tblWord, column, null, null, null, null, null, null);
 
         if (cursor.getCount() > 0) {
             while (cursor.moveToNext()) {
@@ -71,17 +72,58 @@ public class MyHelper extends SQLiteOpenHelper {
         return words;
     }
 
-    public List<Word>GetWordByName(String word,SQLiteDatabase db){
+    public List<Word> GetWordByName(String word, SQLiteDatabase db) {
         List<Word> words = new ArrayList<>();
-        Cursor cursor= db.rawQuery("select * from tblWord where word like '" + word+"%'", null);
-        if (cursor.getCount()>0){
-            while (cursor.moveToNext()){
+        Cursor cursor = db.rawQuery("select * from tblWord where word like '" + word + "%'", null);
+        if (cursor.getCount() > 0) {
+            while (cursor.moveToNext()) {
                 words.add(new Word(cursor.getInt(0), cursor.getString(1), cursor.getString(2)));
 
             }
         }
         return words;
     }
+
+
+    public void UpdateWord(Word word, SQLiteDatabase db) {
+        try {
+            System.out.println(word.getWordId()+" "+word.getWordName()+" "+word.getWordMeaning());
+            db = getWritableDatabase();
+            String qry = "UPDATE " + tblWord + " SET " + Word + "='" + word.getWordName() + "' WHERE " +
+                    WordId + "= ?";
+            db.execSQL(qry, new String[]{String.valueOf(word.getWordId())});
+
+        } catch (Exception e) {
+            System.out.println(e.getLocalizedMessage());
+        }
+    }
+
+    public int UpdateWords(Word word, SQLiteDatabase db) {
+        try {
+            db = getWritableDatabase();
+            ContentValues values = new ContentValues();
+            values.put(Word, word.getWordName());
+            values.put(Meaning, word.getWordMeaning());
+            return db.update(tblWord, values, WordId + "=?", new String[]{
+                    String.valueOf(word.getWordId())
+            });
+        } catch (Exception e) {
+            System.out.println(e.getLocalizedMessage());
+            return 0;
+        }
+    }
+
+    public void deleteWord(Word word) {
+        try {
+            SQLiteDatabase db = getWritableDatabase();
+            db.delete(tblWord, WordId + " =?", new String[]{String.valueOf(word.getWordId())});
+            db.close();
+        } catch (Exception e) {
+            System.out.println(e.getLocalizedMessage());
+
+        }
+    }
+
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
