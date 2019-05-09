@@ -74,7 +74,7 @@ public class MyHelper extends SQLiteOpenHelper {
 
     public List<Word> GetWordByName(String word, SQLiteDatabase db) {
         List<Word> words = new ArrayList<>();
-        Cursor cursor = db.rawQuery("select * from tblWord where word like '" + word + "%'", null);
+        Cursor cursor = db.rawQuery("select * from tblWord where word = '" + word + "%'", null);
         if (cursor.getCount() > 0) {
             while (cursor.moveToNext()) {
                 words.add(new Word(cursor.getInt(0), cursor.getString(1), cursor.getString(2)));
@@ -84,12 +84,25 @@ public class MyHelper extends SQLiteOpenHelper {
         return words;
     }
 
+    public static int getWordId(Word wordPass,SQLiteDatabase db) {
+        System.out.println(wordPass.getWordName());
+        Cursor cursor = db.rawQuery("select WordId from tblWord where word ='" + wordPass.getWordName() + "'", null);
+        if (cursor.getCount() > 0) {
+            if (cursor.moveToNext()) {
+                System.out.println(cursor.getInt(0));
+                return cursor.getInt(0);
+            }
+        }
+        return 0;
+
+    }
+
 
     public void UpdateWord(Word word, SQLiteDatabase db) {
         try {
-            System.out.println(word.getWordId()+" "+word.getWordName()+" "+word.getWordMeaning());
+            System.out.println("Update"+word.getWordId() + " " + word.getWordName() + " " + word.getWordMeaning());
             db = getWritableDatabase();
-            String qry = "UPDATE " + tblWord + " SET " + Word + "='" + word.getWordName() + "' WHERE " +
+            String qry = "UPDATE " + tblWord + " SET " + Word + "='" + word.getWordName() + "'  sWHERE " +
                     WordId + "= ?";
             db.execSQL(qry, new String[]{String.valueOf(word.getWordId())});
 

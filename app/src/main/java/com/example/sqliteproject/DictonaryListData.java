@@ -35,6 +35,9 @@ public class DictonaryListData extends AppCompatActivity {
         lstWord = findViewById(R.id.lstWord);
         txtSearch = findViewById(R.id.txtSearchWord);
         btnSearch = findViewById(R.id.btnSearch);
+        myHelper = new MyHelper(this);
+        sqLiteDatabase = myHelper.getWritableDatabase();
+
         loadWord();
         btnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -42,13 +45,15 @@ public class DictonaryListData extends AppCompatActivity {
                 searchWord(txtSearch.getText().toString());
             }
         });
+
         lstWord.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
                 String wordValue = parent.getItemAtPosition(position).toString();
                 String meaning = hashMap.get(wordValue);
-                int wid =position;
+
+                Word words = new Word(0,wordValue,"");
+                int wid =MyHelper.getWordId(words,sqLiteDatabase);
                 Intent intent = new Intent(DictonaryListData.this, ShowMeaning.class);
                 intent.putExtra("wid", wid);
                 intent.putExtra("word", wordValue);
@@ -64,8 +69,6 @@ public class DictonaryListData extends AppCompatActivity {
     }
 
     private void loadWord() {
-        myHelper = new MyHelper(this);
-        sqLiteDatabase = myHelper.getWritableDatabase();
 
         List<Word> wordList = new ArrayList<>();
 

@@ -41,24 +41,32 @@ public class ShowMeaning extends AppCompatActivity {
             wordExtra = bundle.getString("word");
             meaningExtra = bundle.getString("meaning");
             tvMeaning.setText(meaningExtra);
-            tvWord.setText(wordExtra +" id: "+wid);
+            tvWord.setText(wordExtra );
         }
 
 
         btnUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                wordExtra = tvWord.getText().toString();
-                meaningExtra = tvMeaning.getText().toString();
-                Word word = new Word(wid, wordExtra, meaningExtra);
-                myHelper.UpdateWord(word, sqLiteDatabase);
+                try {
+                    wordExtra = tvWord.getText().toString();
+                    meaningExtra = tvMeaning.getText().toString();
+                    Word word = new Word(wid, wordExtra, meaningExtra);
+                    myHelper.UpdateWords(word, sqLiteDatabase);
+
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+
+
             }
         });
 
         btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+              Word word = new Word(wid, wordExtra, meaningExtra);
+                myHelper.deleteWord(word);
             }
         });
 

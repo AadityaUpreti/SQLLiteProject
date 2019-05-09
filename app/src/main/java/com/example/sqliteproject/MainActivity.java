@@ -49,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+
     public void clear() {
         txtMeaning.setText("");
         txtWord.setText("");
